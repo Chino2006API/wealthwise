@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WealthWise — Tu Asesor Financiero Inteligente</title>
+    <meta name="description" content="Asesor financiero web para principiantes. Descubre tu perfil de riesgo, obtén recomendaciones de inversión y proyecta tu futuro.">
+    
+    <!-- Error Catcher para Debug -->
+    <script>
+    window.onerror = function(message, source, lineno, colno, error) {
+        alert("🚨 ERROR DETECTADO:\n" + message + "\n\nArchivo: " + (source ? source.split('/').pop() : 'desconocido') + "\nLínea: " + lineno);
+        return false;
+    };
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/animations.css">
+    
+    <!-- Chart.js -->
+    <script src="js/chart.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- Mobile Toggle -->
+        <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+        <!-- Sidebar Navigation -->
+        <nav id="sidebar-nav">
+            <div class="logo">
+                <span class="logo-icon material-icons-outlined">savings</span>
+                <span class="logo-text">WealthWise</span>
+            </div>
+            
+            <div class="nav-links">
+                <a href="#" class="nav-link active" data-section="welcome-section">
+                    <span class="nav-link-icon material-icons-outlined">home</span> Inicio
+                </a>
+                <a href="#" class="nav-link" data-section="quiz-section" id="nav-quiz">
+                    <span class="nav-link-icon material-icons-outlined">track_changes</span> Mi Perfil
+                </a>
+                
+                <div class="nav-divider"></div>
+                
+                <a href="#" class="nav-link" data-section="dashboard-section" id="nav-dashboard">
+                    <span class="nav-link-icon material-icons-outlined">bar_chart</span> Dashboard
+                </a>
+                <a href="#" class="nav-link" data-section="simulator-section">
+                    <span class="nav-link-icon material-icons-outlined">trending_up</span> Simulador
+                </a>
+                <a href="#" class="nav-link" data-section="recommendations-section">
+                    <span class="nav-link-icon material-icons-outlined">diamond</span> Recomendaciones
+                </a>
+                <a href="#" class="nav-link" data-section="comparator-section">
+                    <span class="nav-link-icon material-icons-outlined">balance</span> Comparador
+                </a>
+                
+                <div class="nav-divider"></div>
+                
+                <a href="#" class="nav-link" data-section="education-section">
+                    <span class="nav-link-icon material-icons-outlined">menu_book</span> Educación
+                </a>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main id="main-content">
+            
+            <!-- Welcome Section -->
+            <section id="welcome-section" class="content-section">
+                <div class="hero animate-fadeInUp">
+                    <h1>Invierte con inteligencia.</h1>
+                    <p>WealthWise te guía paso a paso para invertir tu dinero de manera inteligente, segura y con el menor riesgo posible. Sin jerga complicada.</p>
+                    <button class="btn btn-primary btn-lg" id="btn-start-quiz">
+                        Comenzar Mi Evaluación <span aria-hidden="true">→</span>
+                    </button>
+                </div>
+                
+                <div class="grid-3 mt-3">
+                    <div class="card feature-card animate-fadeInUp delay-1">
+                        <span class="feature-icon material-icons-outlined">track_changes</span>
+                        <h3>Perfil Personalizado</h3>
+                        <p>Descubre tu perfil de inversor basado en tu situación financiera actual y objetivos a largo plazo.</p>
+                    </div>
+                    <div class="card feature-card animate-fadeInUp delay-2">
+                        <span class="feature-icon material-icons-outlined">trending_up</span>
+                        <h3>Inversiones Inteligentes</h3>
+                        <p>Recomendaciones claras de ETFs y fondos, estructuradas para maximizar el retorno y minimizar el riesgo.</p>
+                    </div>
+                    <div class="card feature-card animate-fadeInUp delay-3">
+                        <span class="feature-icon material-icons-outlined">menu_book</span>
+                        <h3>Educación Financiera</h3>
+                        <p>Aprende las reglas de oro del dinero, cómo funciona el interés compuesto y elimina los mitos comunes.</p>
+                    </div>
+                </div>
+                
+                <div class="trust-badges animate-fadeIn delay-4">
+                    <div class="trust-badge">
+                        <span class="trust-badge-icon material-icons-outlined">shield</span> Tus datos solo se guardan en tu dispositivo
+                    </div>
+                    <div class="trust-badge">
+                        <span class="trust-badge-icon material-icons-outlined">check_circle</span> Metodología estándar de la industria
+                    </div>
+                    <div class="trust-badge">
+                        <span class="trust-badge-icon material-icons-outlined">money_off</span> 100% gratuito y sin registro
+                    </div>
+                </div>
+                
+                <div class="disclaimer text-center animate-fadeIn delay-5">
+                    <strong>Aviso Legal:</strong> WealthWise es una herramienta educativa. Las proyecciones y recomendaciones no constituyen asesoramiento financiero profesional. Toda inversión conlleva riesgos.
+                </div>
+            </section>
+
+            <!-- Quiz Section -->
+            <section id="quiz-section" class="content-section" style="display: none;">
+                <div class="quiz-container">
+                    <div class="quiz-progress">
+                        <div class="flex-between">
+                            <span id="quiz-progress-text" class="quiz-progress-text">Pregunta 1 de 10</span>
+                        </div>
+                        <div class="progress-track">
+                            <div id="quiz-progress-bar" class="progress-fill" style="width: 10%;"></div>
+                        </div>
+                    </div>
+                    
+                    <div id="quiz-question-container">
+                        <!-- Populated by JS -->
+                    </div>
+                    
+                    <div class="quiz-navigation">
+                        <button id="quiz-prev-btn" class="btn btn-secondary" style="visibility: hidden;">← Anterior</button>
+                        <button id="quiz-next-btn" class="btn btn-primary">Siguiente →</button>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Quiz Results Screen (Temporary during flow) -->
+            <section id="quiz-results-section" class="content-section" style="display: none;">
+                <div class="quiz-results animate-fadeInUp">
+                    <h2>¡Análisis Completado!</h2>
+                    <p class="text-secondary">Hemos analizado tus respuestas y calculado tu perfil ideal.</p>
+                    
+                    <div class="quiz-results-gauge">
+                        <div class="health-score-circle mx-auto">
+                            <svg viewBox="0 0 130 130">
+                                <circle class="bg-circle" cx="65" cy="65" r="61"></circle>
+                                <circle id="result-score-circle" class="progress-circle" cx="65" cy="65" r="61" stroke="var(--accent-gold)" stroke-dasharray="383" stroke-dashoffset="383"></circle>
+                            </svg>
+                            <div id="result-score-value" class="health-score-value">0</div>
+                        </div>
+                    </div>
+                    
+                    <p class="text-muted text-uppercase" style="letter-spacing: 0.1em; font-size: 0.8rem;">TU PERFIL DE INVERSOR ES:</p>
+                    <div id="result-profile-name" class="quiz-results-profile text-gold">Analizando...</div>
+                    
+                    <button id="btn-view-dashboard" class="btn btn-primary btn-lg mt-2">
+                        Ver Mi Dashboard y Recomendaciones
+                    </button>
+                </div>
+            </section>
+
+            <!-- Dashboard Section -->
+            <section id="dashboard-section" class="content-section" style="display: none;">
+                <div class="section-header">
+                    <h2 id="dashboard-welcome">Hola, bienvenido</h2>
+                    <p>Aquí tienes el resumen de tu salud financiera y estrategia de inversión recomendada.</p>
+                </div>
+                
+                <!-- Top Row: Metrics -->
+                <div class="grid-3 mb-2">
+                    <!-- Risk Profile -->
+                    <div class="card metric-card">
+                        <div class="metric-card-label mb-1">Perfil de Riesgo</div>
+                        <div class="gauge-container">
+                            <div class="gauge">
+                                <div class="gauge-bg"></div>
+                                <div id="risk-gauge-needle" class="gauge-needle"></div>
+                            </div>
+                            <div id="risk-profile-label" class="gauge-label text-gold">Moderado</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Health Score -->
+                    <div class="card metric-card flex-center flex-col">
+                        <div class="metric-card-label mb-1">Score de Salud Financiera</div>
+                        <div class="health-score-container">
+                            <div class="health-score-circle">
+                                <svg viewBox="0 0 130 130">
+                                    <circle class="bg-circle" cx="65" cy="65" r="61"></circle>
+                                    <circle id="health-score-circle" class="progress-circle" cx="65" cy="65" r="61" stroke="var(--accent-green)" stroke-dasharray="383" stroke-dashoffset="383"></circle>
+                                </svg>
+                                <div id="health-score-value" class="health-score-value">0</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Monthly Summary -->
+                    <div class="card metric-card">
+                        <div class="metric-card-label mb-1">Resumen Mensual</div>
+                        <div class="flex-between mb-05">
+                            <span class="text-secondary">Ingresos:</span>
+                            <span id="dash-income" class="font-heading font-weight-600 text-primary">$0</span>
+                        </div>
+                        <div class="flex-between mb-1">
+                            <span class="text-secondary">Gastos:</span>
+                            <span id="dash-expenses" class="font-heading font-weight-600 text-red">$0</span>
+                        </div>
+                        <div class="divider mb-1"></div>
+                        <div class="flex-between">
+                            <span class="text-secondary font-weight-600">Disponible:</span>
+                            <span id="dash-available" class="font-heading font-weight-700 text-green text-lg">$0</span>
+                        </div>
+                        <div class="text-center mt-1">
+                            <button id="btn-retake-quiz" class="btn btn-outline btn-sm">Actualizar datos</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Middle Row: Allocation -->
+                <div class="grid-2 mb-2">
+                    <div class="card">
+                        <h3 class="mb-1">Distribución Sugerida</h3>
+                        <div class="chart-container" style="height: 250px;">
+                            <canvas id="allocation-chart"></canvas>
+                        </div>
+                    </div>
+                    <div class="card flex-col" style="justify-content: center;">
+                        <h3 class="mb-1">Composición del Portafolio</h3>
+                        <div id="allocation-table" class="allocation-table">
+                            <!-- Populated by JS -->
+                        </div>
+                        <div class="mt-2 text-center">
+                            <button id="btn-view-recs" class="btn btn-secondary">Ver detalles de activos →</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Bottom Row: Emergency Fund -->
+                <div id="emergency-section" class="emergency-section mb-3">
+                    <h3><span class="material-icons-outlined">warning</span> Fondo de Emergencia</h3>
+                    <p class="text-secondary mb-1">Antes de invertir en riesgo, necesitas un colchón para imprevistos. Recomendamos cubrir 6 meses de gastos.</p>
+                    
+                    <div class="emergency-grid">
+                        <div class="input-group mb-0">
+                            <label>Mis gastos mensuales ($)</label>
+                            <input type="number" id="emergency-months-expenses" min="0" step="100">
+                        </div>
+                        <div class="input-group mb-0">
+                            <label>Mi ahorro actual seguro ($)</label>
+                            <input type="number" id="emergency-current-savings" min="0" step="100">
+                        </div>
+                    </div>
+                    
+                    <div class="flex-between mb-05">
+                        <span class="text-secondary font-weight-500">Progreso (<span id="emergency-percent">0</span>%)</span>
+                        <span class="text-primary font-weight-600"><span id="emergency-current" class="text-gold">$0</span> / <span id="emergency-target">$0</span></span>
+                    </div>
+                    <div class="progress-track mb-1">
+                        <div id="emergency-progress-bar" class="progress-fill" style="width: 0%; background: var(--accent-red);"></div>
+                    </div>
+                    
+                    <div id="emergency-recommendation" class="emergency-recommendation">
+                        <span class="emergency-recommendation-icon material-icons-outlined">priority_high</span>
+                        <span id="emergency-recommendation-text">Prioridad #1: Construye tu fondo de emergencia antes de invertir. Te faltan <strong id="emergency-remaining" class="text-primary">$0</strong>.</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Simulator Section -->
+            <section id="simulator-section" class="content-section" style="display: none;">
+                <div class="section-header">
+                    <h2>Simulador de Inversiones</h2>
+                    <p>Visualiza cómo el poder del interés compuesto multiplicará tu dinero en el tiempo.</p>
+                </div>
+                
+                <div class="simulator-layout">
+                    <!-- Controls -->
+                    <div class="card simulator-controls">
+                        <h3 class="mb-1">Tus Parámetros</h3>
+                        
+                        <div class="input-group">
+                            <label>Inversión Inicial</label>
+                            <div id="sim-initial-value" class="input-value">$0</div>
+                            <input type="range" id="sim-initial-investment" min="0" max="100000" step="500" value="0">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label>Aporte Mensual</label>
+                            <div id="sim-monthly-value" class="input-value">$0</div>
+                            <input type="range" id="sim-monthly-contribution" min="0" max="5000" step="50" value="200">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label>Horizonte (Años)</label>
+                            <div id="sim-years-value" class="input-value">10</div>
+                            <input type="range" id="sim-years" min="1" max="40" step="1" value="10">
+                        </div>
+                        
+                        <div class="divider mb-1"></div>
+                        
+                        <div class="flex-between">
+                            <span class="text-secondary font-weight-500">Retorno Anual Estimado:</span>
+                            <span id="sim-rate-display" class="badge badge-medium">7.0%</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Chart & Results -->
+                    <div>
+                        <div class="scenario-buttons mb-1">
+                            <button class="scenario-btn" data-scenario="pessimistic">Escenario Pesimista</button>
+                            <button class="scenario-btn active" data-scenario="expected">Escenario Esperado</button>
+                            <button class="scenario-btn" data-scenario="optimistic">Escenario Optimista</button>
+                        </div>
+                        
+                        <div class="card mb-1">
+                            <div class="chart-container simulator-chart-area">
+                                <canvas id="sim-chart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="grid-3">
+                            <div class="card result-card">
+                                <div class="result-card-label">Total Invertido (Tuyo)</div>
+                                <div id="sim-total-invested" class="result-card-value text-primary">$0</div>
+                            </div>
+                            <div class="card result-card card-green">
+                                <div class="result-card-label">Ganancia por Interés</div>
+                                <div id="sim-total-returns" class="result-card-value text-green">$0</div>
+                            </div>
+                            <div class="card result-card card-gold">
+                                <div class="result-card-label">Valor Final Proyectado</div>
+                                <div id="sim-projected-value" class="result-card-value text-gold">$0</div>
+                            </div>
+                        </div>
+                        
+                        <div class="comparison-box">
+                            <h4><span class="material-icons-outlined">account_balance</span> Comparación: El Costo de No Invertir</h4>
+                            <div class="comparison-row">
+                                <span>Valor si dejas el dinero en el banco (0.5% anual)</span>
+                                <strong id="sim-bank-value" class="text-primary">$0</strong>
+                            </div>
+                            <div class="comparison-row">
+                                <span>Poder adquisitivo real (ajustado por 3% de inflación)</span>
+                                <strong id="sim-inflation-value" class="text-red">$0</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Recommendations Section -->
+            <section id="recommendations-section" class="content-section" style="display: none;">
+                <div class="section-header">
+                    <h2>Recomendaciones de Inversión</h2>
+                    <p id="recs-subtitle">Basado en tu perfil, aquí tienes los instrumentos ideales para construir tu portafolio.</p>
+                </div>
+                
+                <div id="recommendations-container">
+                    <!-- Populated by JS -->
+                </div>
+            </section>
+
+            <!-- Education Section -->
+            <section id="education-section" class="content-section" style="display: none;">
+                <div class="section-header">
+                    <h2>Centro de Educación Financiera</h2>
+                    <p>El mejor momento para plantar un árbol fue hace 20 años. El segundo mejor momento es hoy.</p>
+                </div>
+                
+                <div class="tab-nav">
+                    <button class="tab-btn active" data-target="glossary">Glosario</button>
+                    <button class="tab-btn" data-target="guides">Guías Paso a Paso</button>
+                    <button class="tab-btn" data-target="myths">Mitos vs Realidad</button>
+                    <button class="tab-btn" data-target="rules">Reglas de Oro</button>
+                </div>
+                
+                <div id="glossary-tab" class="tab-content active">
+                    <div class="glossary-search">
+                        <input type="text" id="glossary-search-input" placeholder="Buscar un término (ej. ETF, Interés compuesto...)">
+                    </div>
+                    <div id="glossary-container" class="grid-2">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+                
+                <div id="guides-tab" class="tab-content">
+                    <div id="guides-container">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+                
+                <div id="myths-tab" class="tab-content">
+                    <div id="myths-container">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+                
+                <div id="rules-tab" class="tab-content">
+                    <div id="rules-container" class="grid-2">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Comparator Section -->
+            <section id="comparator-section" class="content-section" style="display: none;">
+                <div class="section-header">
+                    <h2>Comparador de Estrategias</h2>
+                    <p>Observa cómo la asignación de activos afecta el riesgo y el retorno a lo largo del tiempo.</p>
+                </div>
+                
+                <div class="card mb-2">
+                    <div class="flex-between mb-1 flex-wrap gap-1">
+                        <div class="period-buttons">
+                            <button class="period-btn" data-period="5">5 Años</button>
+                            <button class="period-btn" data-period="10">10 Años</button>
+                            <button class="period-btn active" data-period="20">20 Años</button>
+                            <button class="period-btn" data-period="30">30 Años</button>
+                        </div>
+                        <div class="flex-row gap-05">
+                            <input type="checkbox" id="comp-inflation" checked>
+                            <label for="comp-inflation" class="text-sm text-secondary">Ajustar por inflación (3%)</label>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container" style="height: 350px;">
+                        <canvas id="comparator-chart"></canvas>
+                    </div>
+                    <div class="text-center mt-1 text-sm text-muted">
+                        Basado en inversión inicial de $10,000 + $200 mensuales.
+                    </div>
+                </div>
+                
+                <div class="grid-4" id="comparator-cards">
+                    <!-- Populated by JS -->
+                </div>
+                
+                <div id="comparator-analysis" class="mt-2">
+                    <!-- Populated by JS -->
+                </div>
+            </section>
+            
+        </main>
+    </div>
+    
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Scripts (Order is important) -->
+    <script src="js/utils.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/quiz.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/simulator.js"></script>
+    <script src="js/recommendations.js"></script>
+    <script src="js/education.js"></script>
+    <script src="js/comparator.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
