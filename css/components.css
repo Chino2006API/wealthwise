@@ -4,17 +4,21 @@
 
 /* --- Cards --- */
 .card {
-  background: var(--bg-card);
+  background: linear-gradient(135deg, var(--glass-bg) 0%, rgba(255, 255, 255, 0.01) 100%);
   border: 1px solid var(--glass-border);
+  border-top: 1px solid var(--glass-border-light);
+  border-left: 1px solid var(--glass-border-light);
   border-radius: var(--radius-lg);
   padding: 2rem;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  transition: border-color var(--transition-normal), box-shadow var(--transition-normal), transform var(--transition-normal);
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
+  box-shadow: var(--glass-shadow);
+  transition: all var(--transition-normal);
 }
 .card:hover {
-  border-color: rgba(255, 255, 255, 0.12);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  background: linear-gradient(135deg, var(--glass-bg-hover) 0%, rgba(255, 255, 255, 0.02) 100%);
+  border-color: var(--glass-border-light);
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45);
 }
 .card-gold {
   border-color: rgba(229, 169, 61, 0.3);
@@ -306,22 +310,26 @@
   align-items: center;
   gap: 1rem;
   padding: 1.125rem 1.25rem;
-  background: var(--bg-card);
+  background: linear-gradient(135deg, var(--glass-bg) 0%, rgba(255, 255, 255, 0.01) 100%);
   border: 1px solid var(--glass-border);
+  border-top: 1px solid var(--glass-border-light);
+  border-left: 1px solid var(--glass-border-light);
   border-radius: var(--radius-md);
   cursor: pointer;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(20px) saturate(120%);
+  -webkit-backdrop-filter: blur(20px) saturate(120%);
+  box-shadow: var(--glass-shadow);
   transition: all var(--transition-fast);
   position: relative;
 }
 .quiz-option:hover {
-  background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: linear-gradient(135deg, var(--glass-bg-hover) 0%, rgba(255, 255, 255, 0.02) 100%);
+  border-color: var(--glass-border-light);
 }
 .quiz-option.selected {
   border-color: var(--text-primary);
-  background: var(--bg-secondary);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
 }
 .quiz-option.selected::after {
   content: '✓';
